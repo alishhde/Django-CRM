@@ -31,3 +31,6 @@ def logout_user(request):
     context = {
 
     }
+    logout(request)
+    messages.success(request, "You have been Logged Out...")
+    return redirect('home')
