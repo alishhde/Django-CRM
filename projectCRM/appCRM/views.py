@@ -2,11 +2,14 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from . forms import SignUpForm
+from . models import Record
 
 
 def home(request):
-    context = {
+    records = Record.objects.all()
 
+    context = {
+        'records': records,
     }
 
     # Check to see if user is logging in (on the other words, if user is posting data)
@@ -59,3 +62,18 @@ def register_user(request):
     }
 
     return render(request, 'register.html', context)
+
+
+def customer_record(request, pk):
+    if request.user.is_authenticated:
+        # Look Up records
+        custom_record = Record.objects.get(id=pk)
+        context = {
+            'customer_record': custom_record,
+        }
+
+        return render(request, 'record.html', context)
+    else:
+        messages.success(request, "You are not Logged in...")
+        return redirect('home')
+
